@@ -420,62 +420,63 @@ const BridgeTwo: React.FC<BridgeTwoProps> = ({ className = '', onSwapDirection }
     parseFloat(amount) > parseFloat(formatBalance(balance));
 
   return (
-    <div className={`max-w-md mx-auto bg-gray-800/50 backdrop-blur-md rounded-2xl p-6 border border-gray-700/50 ${className}`}>
+    <div className={`max-w-xl mx-auto bg-gray-800/50 backdrop-blur-md rounded-2xl p-6 border border-gray-700/50 ${className}`}>
       {/* From Section */}
       <div className="mb-4">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-sm text-gray-400">From:</span>
-          <span className="text-sm text-gray-400">
-            Balance: {isConnected ? formatBalance(balance) : '0'} {fromToken.symbol}
+        <div className="flex items-center justify-between mb-2 text-sm">
+          <div className="flex items-center gap-2">
+            <span className="text-gray-400">From</span>
+
+            {/* Chain Selector */}
+            <div className="bg-gray-800/50 border border-gray-600/50 rounded-full px-2.5 py-2 flex items-center justify-center gap-2">
+              <div className="w-5 h-5 bg-blue-400 rounded-full flex items-center justify-center">
+                <span className="text-xs font-bold text-white">
+                  {import.meta.env.VITE_L2_COIN_SYMBOL?.charAt(0) || 'L2'}
+                </span>
+              </div>
+              <div className="text-white font-medium">
+                {import.meta.env.VITE_L2_NAME || 'L2 Network'}
+              </div>
+            </div>
+          </div>
+          <div>
+          <span className="text-gray-400 mr-1">
+            Balance: 
           </span>
+          <span className='text-white'>{isConnected ? formatBalance(balance) : '0'} {fromToken.symbol}</span>
+          </div>
         </div>
         
         <div className="relative">
           <div className="bg-gray-700/50 rounded-xl p-4 border border-gray-600/50">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                {/* Chain Selector */}
-                <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 bg-blue-400 rounded-full flex items-center justify-center">
-                    <span className="text-xs font-bold text-white">
-                      {import.meta.env.VITE_L2_COIN_SYMBOL?.charAt(0) || 'L2'}
-                    </span>
-                  </div>
-                  <div className="bg-transparent text-white font-medium outline-none cursor-pointer">
-                    {import.meta.env.VITE_L2_NAME || 'L2 Network'}
-                  </div>
-                </div>
-                
-                {/* ✅ ENHANCED: TokenSelectorL2 with available L2 tokens including ETHg */}
-                <TokenSelectorL2
-                  selectedToken={fromToken}
-                  onTokenSelect={handleFromTokenSelect}
-                  chainId={fromChain.id}
-                  className="ml-2"
-                  availableTokens={availableTokens} // Pass L2-specific tokens
-                />
-              </div>
+            <div className="flex">
+              <input
+                type="number"
+                placeholder="0"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                className="bg-transparent text-white text-2xl font-semibold outline-none w-full placeholder-gray-500"
+              />
+
+              {/* ✅ ENHANCED: TokenSelectorL2 with available L2 tokens including ETHg */}
+              <TokenSelectorL2
+                selectedToken={fromToken}
+                onTokenSelect={handleFromTokenSelect}
+                chainId={fromChain.id}
+                className="ml-2"
+                availableTokens={availableTokens} // Pass L2-specific tokens
+              />
               
-              <div className="text-right">
-                <input
-                  type="number"
-                  placeholder="0"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  className="bg-transparent text-white text-2xl font-semibold text-right outline-none w-full max-w-[120px] placeholder-gray-500"
-                />
-                <div className="flex items-center gap-2 justify-end mt-1">
-                  <span className="text-sm text-gray-400">{fromToken.symbol}</span>
-                  {isConnected && balance && Number(balance) > 0 ? (
-                    <button
-                      onClick={handleMaxClick}
-                      className="text-xs text-blue-400 hover:text-blue-300 transition-colors"
-                    >
-                      MAX
-                    </button>
-                  ) : null}
+              {isConnected && balance && Number(balance) > 0 ? (
+                <div className="flex items-center gap-2 mt-2">
+                  <button
+                    onClick={handleMaxClick}
+                    className="text-xs text-blue-400 hover:text-blue-300 cursor-pointer font-medium"
+                  >
+                    MAX
+                  </button>
                 </div>
-              </div>
+              ) : null}
             </div>
           </div>
         </div>
@@ -494,40 +495,43 @@ const BridgeTwo: React.FC<BridgeTwoProps> = ({ className = '', onSwapDirection }
 
       {/* To Section */}
       <div className="mb-6">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-sm text-gray-400">To:</span>
-          <span className="text-sm text-gray-400">
-            Receive: {amount || '0'} {toToken.symbol}
-          </span>
+        <div className="flex items-center justify-between mb-2 text-sm">
+          <div className="flex items-center gap-2">
+            <span className="text-gray-400">To</span>
+
+            {/* Chain Selector */}
+            <div className="bg-gray-800/50 border border-gray-600/50 rounded-full px-2.5 py-2 flex items-center justify-center gap-2">
+              <div className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
+                <span className="text-xs font-bold text-white">
+                  {import.meta.env.VITE_L1_COIN_SYMBOL?.charAt(0) || 'L1'}
+                </span>
+              </div>
+              <div className="text-white font-medium">
+                {import.meta.env.VITE_L1_NAME || 'L1 Network'}
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <span className="text-gray-400 mr-1">Receive: </span>
+            <span className='text-white'>{amount || '0'} {toToken.symbol}</span>
+          </div>
         </div>
         
         <div className="bg-gray-700/50 rounded-xl p-4 border border-gray-600/50">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              {/* Chain Selector */}
-              <div className="flex items-center gap-2">
-                <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
-                  <span className="text-xs font-bold text-white">
-                    {import.meta.env.VITE_L1_COIN_SYMBOL?.charAt(0) || 'L1'}
-                  </span>
-                </div>
-                <div className="bg-transparent text-white font-medium outline-none cursor-pointer">
-                  {import.meta.env.VITE_L1_NAME || 'L1 Network'}
-                </div>
-              </div>
+          <div className="flex">
+            <div className="flex-1">
+              <span className="text-2xl font-semibold text-white">
+                {amount || '0'}
+              </span>
+            </div>
               
-              {/* ✅ ENHANCED: Token Display shows proper L1 token */}
-              <div className="flex items-center gap-2 ml-2 px-3 py-2">
+            {/* ✅ ENHANCED: Token Display shows proper L1 token */}
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 ml-2 py-1">
                 <span className="text-lg">{toToken.icon}</span>
                 <span className="font-medium text-white">{toToken.symbol}</span>
               </div>
-            </div>
-            
-            <div className="text-right">
-              <div className="text-2xl font-semibold text-white">
-                {amount || '0'}
-              </div>
-              <div className="text-sm text-gray-400 mt-1">{toToken.symbol}</div>
             </div>
           </div>
         </div>
@@ -627,7 +631,7 @@ const BridgeTwo: React.FC<BridgeTwoProps> = ({ className = '', onSwapDirection }
 
       {/* Terms and Conditions */}
       <div className="mb-6">
-        <label className="flex items-start gap-3 cursor-pointer">
+        <label className="flex items-start justify-center gap-3 cursor-pointer">
           <input
             type="checkbox"
             checked={isTermsAccepted}
@@ -653,7 +657,7 @@ const BridgeTwo: React.FC<BridgeTwoProps> = ({ className = '', onSwapDirection }
           isWithdrawPending ||
           isWithdrawConfirming
         }
-        className="w-full py-4 text-lg font-semibold"
+        className="w-full py-4 text-lg font-semibold justify-center"
         variant={hasInsufficientBalance ? "danger" : "primary"}
       >
         {!isConnected
@@ -676,7 +680,7 @@ const BridgeTwo: React.FC<BridgeTwoProps> = ({ className = '', onSwapDirection }
 
       {/* Status Messages and Info... */}
       {withdrawError && (
-        <div className="mb-4 p-3 bg-red-900/30 border border-red-500/50 rounded-lg">
+        <div className="mb-4 p-3 bg-red-900/30 border border-red-500/50 rounded-lg mt-6">
           <div className="text-sm text-red-300">
             Withdrawal Error: {withdrawError.message}
           </div>
@@ -684,7 +688,7 @@ const BridgeTwo: React.FC<BridgeTwoProps> = ({ className = '', onSwapDirection }
       )}
 
       {isWithdrawSuccess && (
-        <div className="mb-4 p-3 bg-green-900/30 border border-green-500/50 rounded-lg">
+        <div className="mb-4 p-3 bg-green-900/30 border border-green-500/50 rounded-lg mt-6">
           <div className="text-sm text-green-300">
             ✅ Withdrawal successful! Your L2 {fromToken.symbol} have been burned.
             <br />
@@ -706,7 +710,7 @@ const BridgeTwo: React.FC<BridgeTwoProps> = ({ className = '', onSwapDirection }
       )}
 
       {/* ✅ ENHANCED: Withdrawal Info */}
-      <div className="bg-blue-900/20 border border-blue-500/30 rounded-lg p-4">
+      <div className="bg-blue-900/20 border border-blue-500/30 rounded-lg p-4 mt-6">
         <h4 className="text-blue-300 font-medium mb-2">Withdrawal Process:</h4>
         <ul className="text-sm text-blue-200 space-y-1">
           <li>1. L2 {fromToken.symbol} tokens are burned immediately</li>

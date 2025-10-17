@@ -63,16 +63,9 @@ const TokenSelectorL2: React.FC<TokenSelectorL2Props> = ({
   const [showCustomInput, setShowCustomInput] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { address: userAddress } = useAccount();
-
-  // ✅ FIXED: Get L2 tokens specifically including dynamic tokens
-  const allAvailableTokens = getAvailableTokensForChain(chainId, availableTokens);
-  
-  // ✅ SEPARATE DIFFERENT TYPES OF TOKENS
-  const nativeTokens = allAvailableTokens.filter(token => token.isNative);
-  const ethgTokens = allAvailableTokens.filter(token => isETHgToken(token));
-  const bridgedTokens = allAvailableTokens.filter(token => 
-    !token.isNative && !isETHgToken(token)
-  );
+  const [nativeTokens, setNativeTokens] = useState<BridgeToken[]>([]);
+  const [ethgTokens, setEthgTokens] = useState<BridgeToken[]>([]);
+  const [bridgedTokens, setBridgedTokens] = useState<BridgeToken[]>([]);
 
   // Read custom token info
   const { data: tokenName, error: nameError, isLoading: nameLoading } = useReadContract({
@@ -216,12 +209,28 @@ const TokenSelectorL2: React.FC<TokenSelectorL2Props> = ({
     return trimmedRemainder ? `${quotient}.${trimmedRemainder}` : quotient.toString();
   };
 
+  useEffect(() => {
+    // ✅ FIXED: Get L2 tokens specifically including dynamic tokens
+    const allAvailableTokens = getAvailableTokensForChain(chainId, availableTokens);
+    
+    // ✅ SEPARATE DIFFERENT TYPES OF TOKENS
+    const nativeTokensFiltered = allAvailableTokens.filter(token => token.isNative);
+    const ethgTokensFiltered = allAvailableTokens.filter(token => isETHgToken(token));
+    const bridgedTokensFiltered = allAvailableTokens.filter(token => 
+      !token.isNative && !isETHgToken(token)
+    );
+
+    setNativeTokens(nativeTokensFiltered);
+    setEthgTokens(ethgTokensFiltered);
+    setBridgedTokens(bridgedTokensFiltered);
+  }, []);
+
   return (
     <div className={`relative ${className}`} ref={dropdownRef}>
       {/* ✅ ENHANCED: Selected Token Display with L2-specific highlighting */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-colors min-w-[120px] ${
+        className={`flex items-center gap-2 px-2 py-1 rounded-lg border transition-colors min-w-[120px] ${
           isETHgToken(selectedToken) 
             ? 'bg-gradient-to-r from-orange-600/20 to-yellow-600/20 border-orange-500/50 hover:from-orange-600/30 hover:to-yellow-600/30' 
             : selectedToken.isNative

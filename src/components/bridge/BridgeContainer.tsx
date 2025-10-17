@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import BridgeOne from './BridgeOne';
 import BridgeTwo from './BridgeTwo';
 import BridgeClaim from './BridgeClaim';
@@ -9,7 +9,7 @@ interface BridgeContainerProps {
 
 type BridgeMode = 'L1_TO_L2' | 'L2_TO_L1' | 'CLAIM';
 
-const BridgeContainer: React.FC<BridgeContainerProps> = ({ className = '' }) => {
+const BridgeContainer = ({ className = '' }: BridgeContainerProps) => {
   const [bridgeMode, setBridgeMode] = useState<BridgeMode>('L1_TO_L2');
 
   const handleSwapDirection = () => {
@@ -21,15 +21,15 @@ const BridgeContainer: React.FC<BridgeContainerProps> = ({ className = '' }) => 
   const toChain = { id: 11155111, name: 'Sepolia' };
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={`relative w-full max-w-xl mx-auto mb-40 ${className}`}>
       {/* Mode Selector Tabs */}
       <div className="mb-4 text-center">
-        <div className="inline-flex items-center bg-gray-800/30 backdrop-blur-sm rounded-lg p-1 border border-gray-700/50">
+        <div className="inline-flex items-center gap-1 bg-gray-800/30 backdrop-blur-sm rounded-lg p-1 border border-gray-700/50">
           <button
             onClick={() => setBridgeMode('L1_TO_L2')}
-            className={`px-4 py-2 rounded-md transition-all ${
+            className={`px-4 py-2 rounded-md transition-all cursor-pointer ${
               bridgeMode === 'L1_TO_L2'
-                ? 'bg-blue-600 text-white shadow-lg'
+                ? 'bg-blue-600/20 text-white shadow-lg'
                 : 'text-gray-400 hover:text-white hover:bg-gray-700/50'
             }`}
           >
@@ -47,9 +47,9 @@ const BridgeContainer: React.FC<BridgeContainerProps> = ({ className = '' }) => 
 
           <button
             onClick={() => setBridgeMode('L2_TO_L1')}
-            className={`px-4 py-2 rounded-md transition-all ${
+            className={`px-4 py-2 rounded-md transition-all cursor-pointer ${
               bridgeMode === 'L2_TO_L1'
-                ? 'bg-blue-600 text-white shadow-lg'
+                ? 'bg-blue-600/20 text-white shadow-lg'
                 : 'text-gray-400 hover:text-white hover:bg-gray-700/50'
             }`}
           >
@@ -67,13 +67,13 @@ const BridgeContainer: React.FC<BridgeContainerProps> = ({ className = '' }) => 
 
           <button
             onClick={() => setBridgeMode('CLAIM')}
-            className={`px-4 py-2 rounded-md transition-all ${
+            className={`px-4 py-2 rounded-md transition-all cursor-pointer ${
               bridgeMode === 'CLAIM'
-                ? 'bg-green-600 text-white shadow-lg'
+                ? 'bg-green-600/20 text-white shadow-lg'
                 : 'text-gray-400 hover:text-white hover:bg-gray-700/50'
             }`}
           >
-            <div className="flex items-center gap-2">
+            <div className="flex items-center justify-center gap-2">
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
