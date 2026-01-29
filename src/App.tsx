@@ -11,6 +11,7 @@ import "@fontsource/roboto/400.css";
 import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import Toast from "@/components/ui/Toast";
+import DefaultLayout from "./layouts";
 
 const Wrapper = ({ children }: PropsWithChildren) => {
   const location = useLocation();
@@ -26,9 +27,11 @@ const App = (props: { disableCustomTheme?: boolean }) => (
       <CssBaseline enableColorScheme />
       <Toast />
       <Routes>
+        <Route element={<DefaultLayout />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/debug" element={<DebugPage />} />
+        </Route>
         {/* Public */}
-        <Route path="/" element={<HomePage />} />
-        <Route path="/debug" element={<DebugPage />} />
         {/* 404 */}
         <Route path="*" element={<div>Halaman tidak ditemukan</div>} />
       </Routes>

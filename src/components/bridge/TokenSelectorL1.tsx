@@ -222,7 +222,7 @@ const TokenSelectorL1: React.FC<TokenSelectorL1Props> = ({
       {/* ✅ ENHANCED: Selected Token Display with DXG highlighting */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-colors min-w-[120px] ${
+        className={`flex items-center gap-2 px-2 py-1 rounded-lg border transition-colors min-w-[120px] ${
           isDXGToken(selectedToken, chainId) 
             ? 'bg-gradient-to-r from-blue-600/20 to-purple-600/20 border-blue-500/50 hover:from-blue-600/30 hover:to-purple-600/30' 
             : selectedToken.isNative

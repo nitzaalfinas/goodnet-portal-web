@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { NavLink, useNavigate, useLocation } from "react-router-dom";
+import { useState } from "react";
+import { NavLink } from "react-router-dom";
 import { useAccount } from "wagmi";
 import { shortenAddress } from "@/utils/formatter";
 import Button from "../ui/Button";
@@ -16,59 +16,28 @@ interface NavbarProps {
 
 const Navbar = ({ static: isStatic = false, className = "" }: NavbarProps) => {
   const account = useAccount();
-  const navigate = useNavigate();
-  const location = useLocation();
 
   const [openModalConnectWallet, setOpenModalConnectWallet] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const [openModalNavbar, setOpenModalNavbar] = useState(false);
-
-  // Check if current page is home
-  const isHomePage = location.pathname === "/";
-
-  // Handle scroll effect only on home page
-  useEffect(() => {
-    if (!isHomePage) {
-      setScrolled(true); // Always show navbar on non-home pages
-      return;
-    }
-
-    const handleScroll = () => {
-      const scrollTop = window.scrollY;
-      const shouldShow = scrollTop > 100; // Show navbar after 100px scroll
-      setScrolled(shouldShow);
-    };
-
-    // Set initial state for home page
-    setScrolled(false);
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [isHomePage]);
-
-
 
   return (
     <>
       <header
         className={`px-4 py-2.5 text-white ${
           isStatic
-            ? `relative bg-main-bg ${className}` // Static navbar
-            : `fixed top-0 left-0 right-0 z-50 ${
-                isHomePage
-                  ? `transition-all duration-500 ease-in-out ${
-                      scrolled
-                        ? "opacity-100 bg-main-bg"
-                        : "opacity-0 bg-transparent"
-                    }`
-                  : "opacity-100 bg-main-bg"
-              } ${className}`
+            ? `relative bg-main-bg ${className}`
+            : `fixed top-0 left-0 right-0 z-50 opacity-100 bg-main-bg ${className}`
         }`}
       >
         <nav className="flex justify-between lg:justify-normal">
           <div className="mr-9 flex items-center gap-2">
             <img src="/img/dexgood-logo.png" alt="Logo" className="h-8" />
-            <span className="text-xs font-semibold tracking-wide ml-1" style={{ color: '#ef4444' }}>testnet</span>
+            <span
+              className="text-xs font-semibold tracking-wide ml-1"
+              style={{ color: "#ef4444" }}
+            >
+              testnet
+            </span>
           </div>
 
           <button
@@ -80,7 +49,7 @@ const Navbar = ({ static: isStatic = false, className = "" }: NavbarProps) => {
 
           {/* Tablet & Desktop */}
           <ul className="hidden lg:flex grow items-center gap-2 font-medium">
-            <li>
+            {/* <li>
               <NavLink
                 to="/"
                 className={({ isActive }) =>
@@ -89,7 +58,7 @@ const Navbar = ({ static: isStatic = false, className = "" }: NavbarProps) => {
               >
                 Home
               </NavLink>
-            </li>
+            </li> */}
           </ul>
 
           {/* Tablet & Desktop */}
@@ -123,8 +92,6 @@ const Navbar = ({ static: isStatic = false, className = "" }: NavbarProps) => {
         open={openModalConnectWallet}
         onClose={() => setOpenModalConnectWallet(false)}
       />
-
-      
 
       <ModalNavbar
         open={openModalNavbar}
